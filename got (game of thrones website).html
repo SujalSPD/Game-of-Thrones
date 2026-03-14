@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game of Thrones - The Realm of Ice and Fire</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #C5A059;
+            --dark-gold: #8B6914;
+            --ice-blue: #A8D8EA;
+            --fire-red: #8B0000;
+            --night-black: #0a0a0a;
+            --steel-gray: #2C3E50;
+            --snow-white: #F0F0F0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--night-black);
+            color: var(--snow-white);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .cinzel {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 5%;
+            border-bottom: 2px solid var(--gold);
+            transition: all 0.3s ease;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--gold);
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        nav a:hover {
+            color: #fff;
+            text-shadow: 0 0 10px var(--gold);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.3)), 
+                        url('https://kimi-web-img.moonshot.cn/img/images2.minutemediacdn.com/d1f3b1eb82f46c37d38185eef7d598ab5f955a81.jpg') center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+            animation: snowfall 10s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes snowfall {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        .hero-content h1 {
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            color: var(--gold);
+            text-shadow: 0 0 30px rgba(197, 160, 89, 0.5);
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            letter-spacing: 0.3em;
+            color: var(--snow-white);
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.3s backwards;
+        }
+
+        .hero-content .tagline {
+            font-size: 1rem;
+            font-style: italic;
+            color: var(--ice-blue);
+            max-width: 600px;
+            line-height: 1.6;
+            animation: fadeInUp 1s ease 0.6s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator::before {
+            content: '▼';
+            color: var(--gold);
+            font-size: 2rem;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-20px); }
+            60% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 5%;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 1rem auto 0;
+        }
+
+        /* About Series Section */
+        #about {
+            background: linear-gradient(180deg, var(--night-black) 0%, #1a1a1a 100%);
+        }
+
+        .about-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #ccc;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .about-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(197, 160, 89, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .about-image:hover {
+            transform: scale(1.02);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .about-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid var(--gold);
+            border-radius: 10px;
+            pointer-events: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(197, 160, 89, 0.1);
+            border: 1px solid var(--gold);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            background: rgba(197, 160, 89, 0.2);
+            box-shadow: 0 10px 30px rgba(197, 160, 89, 0.3);
+        }
+
+        .stat-number {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: var(--gold);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 0.5rem;
+        }
+
+        /* Characters Section */
+        #characters {
+            background: linear-gradient(180deg, #1a1a1a 0%, var(--night-black) 100%);
+        }
+
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .character-card {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border: 1px solid #333;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(197, 160, 89, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .character-card:hover::before {
+            left: 100%;
+        }
+
+        .character-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .character-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            object-position: top;
+            transition: transform 0.3s ease;
+        }
+
+        .character-card:hover .character-image {
+            transform: scale(1.05);
+        }
+
+        .character-info {
+            padding: 2rem;
+        }
+
+        .character-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .character-title {
+            font-size: 0.9rem;
+            color: var(--ice-blue);
+            font-style: italic;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .character-description {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #aaa;
+        }
+
+        .character-house {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.3rem 1rem;
+            background: rgba(197, 160, 89, 0.2);
+            border: 1px solid var(--gold);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* World Building Section */
+        #world {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #world::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 50 L50 0" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></svg>') repeat;
+            opacity: 0.3;
+        }
+
+        .world-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .world-map {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 2px solid var(--gold);
+        }
+
+        .world-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+
+        .world-card {
+            background: rgba(0,0,0,0.4);
+            padding: 2rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--gold);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .world-card:hover {
+            transform: translateX(10px);
+            background: rgba(0,0,0,0.6);
+        }
+
+        .world-card h3 {
+            color: var(--gold);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .world-card p {
+            color: #ccc;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        .world-icon {
+            font-size: 2rem;
+        }
+
+        /* Facts Section */
+        #facts {
+            background: var(--night-black);
+        }
+
+        .facts-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .fact-item {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(90deg, rgba(197, 160, 89, 0.1), transparent);
+            border-left: 4px solid var(--gold);
+            border-radius: 0 10px 10px 0;
+            transition: all 0.3s ease;
+        }
+
+        .fact-item:hover {
+            background: linear-gradient(90deg, rgba(197, 160, 89, 0.2), transparent);
+            transform: translateX(10px);
+        }
+
+        .fact-number {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            color: var(--gold);
+            opacity: 0.5;
+            line-height: 1;
+            min-width: 80px;
+        }
+
+        .fact-content h3 {
+            color: var(--snow-white);
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .fact-content p {
+            color: #999;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: #000;
+            padding: 3rem 5%;
+            text-align: center;
+            border-top: 1px solid #333;
+        }
+
+        footer p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-quote {
+            font-family: 'Cinzel', serif;
+            font-style: italic;
+            color: var(--gold);
+            font-size: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .about-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            nav ul {
+                gap: 1.5rem;
+                font-size: 0.8rem;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Scroll Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--night-black);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--dark-gold);
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">The Series</a></li>
+            <li><a href="#characters">Characters</a></li>
+            <li><a href="#world">World Building</a></li>
+            <li><a href="#facts">Facts</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>GAME OF THRONES</h1>
+            <p>Winter Is Coming</p>
+            <p class="tagline">"When you play the game of thrones, you win or you die. There is no middle ground."</p>
+        </div>
+        <div class="scroll-indicator"></div>
+    </section>
+
+    <section id="about">
+        <h2 class="section-title">The Series</h2>
+        <div class="about-container">
+            <div class="about-text">
+                <p>Game of Thrones is an American fantasy drama television series created by David Benioff and D.B. Weiss for HBO. It is an adaptation of <em>A Song of Ice and Fire</em>, a series of fantasy novels by George R.R. Martin, the first of which is <em>A Game of Thrones</em>.</p>
+                
+                <p>Set on the fictional continents of Westeros and Essos, the series follows several interweaving plot lines and a large ensemble cast. The first story arc follows a dynastic conflict among competing claimants for succession to the Iron Throne of the Seven Kingdoms, with other noble families fighting for independence from the throne.</p>
+                
+                <p>The second covers the attempts to reclaim the throne by the exiled last scion of the realm's deposed ruling dynasty. The third follows the longstanding brotherhood charged with defending the realm against the ancient threats of the fierce peoples and legendary creatures that lie far north and an impending winter that threatens the realm.</p>
+                
+                <p>Filmed across Northern Ireland, Malta, Croatia, Iceland, and Spain, the series premiered on HBO in the United States on April 17, 2011, and concluded on May 19, 2019, with 73 episodes broadcast over eight seasons.</p>
+            </div>
+            <div class="about-image">
+                <img src="https://kimi-web-img.moonshot.cn/img/static.wikia.nocookie.net/193662a2e07d00a9169d8436033069cbba4c920c" alt="The Iron Throne">
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-number">8</span>
+                <div class="stat-label">Seasons</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">73</span>
+                <div class="stat-label">Episodes</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">59</span>
+                <div class="stat-label">Emmy Wins</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">$15M</span>
+                <div class="stat-label">Per Episode (Final Season)</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="characters">
+        <h2 class="section-title">Main Characters</h2>
+        <div class="characters-grid">
+            
+            <div class="character-card">
+                <img src="https://kimi-web-img.moonshot.cn/img/static01.nyt.com/ef59733095fb66fe55944874589c92675f44ffed.jpg" alt="Daenerys Targaryen" class="character-image">
+                <div class="character-info">
+                    <h3 class="character-name">Daenerys Targaryen</h3>
+                    <span class="character-title">Mother of Dragons, Breaker of Chains</span>
+                    <p class="character-description">The last surviving member of House Targaryen, Daenerys begins as a frightened girl sold into marriage to Khal Drogo. Through tragedy and fire, she hatches three dragons and rises to become a powerful queen determined to reclaim the Iron Throne. Her journey from exile to conqueror is marked by liberation of slaves and an increasingly ruthless pursuit of power.</p>
+                    <span class="character-house">House Targaryen</span>
+                </div>
+            </div>
+
+            <div class="character-card">
+                <img src="https://kimi-web-img.moonshot.cn/img/upload.wikimedia.org/0a8850da8303c66767838921ba7c91c0df103782.png" alt="Jon Snow" class="character-image">
+                <div class="character-info">
+                    <h3 class="character-name">Jon Snow</h3>
+                    <span class="character-title">The White Wolf, King in the North</span>
+                    <p class="character-description">Raised as the bastard son of Ned Stark, Jon joins the Night's Watch to escape his status as an outsider. He rises to become Lord Commander, forges an alliance with the wildlings, and is resurrected after betrayal. Later revealed as Aegon Targaryen, the true heir to the Iron Throne, he must navigate between duty, honor, and love.</p>
+                    <span class="character-house">House Stark / Targaryen</span>
+                </div>
+            </div>
+
+            <div class="character-card">
+                <img src="https://kimi-web-img.moonshot.cn/img/ew.com/daec17d97153461627c353793e9b048379f5e053.jpg" alt="Arya Stark" class="character-image">
+                <div class="character-info">
+                    <h3 class="character-name">Arya Stark</h3>
+                    <span class="character-title">No One, The Night King Slayer</span>
+                    <p class="character-description">The youngest Stark daughter rejects traditional female roles, training in swordplay and vowing revenge against those who wronged her family. After fleeing King's Landing, she trains with the Faceless Men in Braavos, learning the art of assassination. She returns to Winterfell a deadly warrior and defeats the Night King in the Battle of Winterfell.</p>
+                    <span class="character-house">House Stark</span>
+                </div>
+            </div>
+
+            <div class="character-card">
+                <img src="https://kimi-web-img.moonshot.cn/img/static01.nyt.com/fec3c11579af3d33824e1850d4ae917b9bb0bda5.jpg" alt="Sansa Stark" class="character-image">
+                <div class="character-info">
+                    <h3 class="character-name">Sansa Stark</h3>
+                    <span class="character-title">Lady of Winterfell, Queen in the North</span>
+                    <p class="character-description">Initially a naive girl dreaming of romance and royalty, Sansa endures brutal captivity in King's Landing, abuse by Ramsay Bolton, and political machinations by Littlefinger. She emerges as a wise and capable leader, ultimately becoming Queen in the North after securing independence from the Seven Kingdoms.</p>
+                    <span class="character-house">House Stark</span>
+                </div>
+            </div>
+
+            <div class="character-card">
+                <img src="https://kimi-web-img.moonshot.cn/img/www.bostonherald.com/ac130fc48ed1a25e876cdc5f79ed3245dc03a5f7.jpg" alt="Cersei Lannister" class="character-image">
+                <div class="character-info">
+                    <h3 class="character-name">Cersei Lannister</h3>
+                    <span class="character-title">Queen of the Seven Kingdoms</span>
+                    <p class="character-description">Twin sister to Jaime and wife of Robert Baratheon, Cersei is ruthless, ambitious, and fiercely protective of her children. After the death of her children and her humiliation by the Faith Militant, she seizes the Iron Throne through wildfire destruction. Her reign is marked by paranoia and desperate defense against Daenerys's invasion.</p>
+                    <span class="character-house">House Lannister</span>
+                </div>
+            </div>
+
+            <div class="character-card">
+                <img src="https://kimi-web-img.moonshot.cn/img/upload.wikimedia.org/03cd8da36ea284c9e429d6729905987c12f7f9cb.jpg" alt="Jaime Lannister" class="character-image">
+                <div class="character-info">
+                    <h3 class="character-name">Jaime Lannister</h3>
+                    <span class="character-title">The Kingslayer</span>
+                    <p class="character-description">Known as the Kingslayer for murdering the Mad King Aerys II, Jaime begins as an arrogant knight but undergoes significant transformation after losing his hand. His complex relationship with Brienne of Tarth reveals his honor, while his love for Cersei ultimately leads to his redemption and death in the ruins of King's Landing.</p>
+                    <span class="character-house">House Lannister</span>
+                </div>
+            </div>
+
+            <div class="character-card">
+                <img src="https://kimi-web-img.moonshot.cn/img/upload.wikimedia.org/bb1f215ab4c48e5ba40627af05006ba8283219cc.jpg" alt="Cersei Lannister" class="character-image" style="object-position: top;">
+                <div class="character-info">
+                    <h3 class="character-name">Tyrion Lannister</h3>
+                    <span class="character-title">Hand of the King, The Imp</span>
+                    <p class="character-description">A dwarf despised by his father and sister, Tyrion survives through wit, intelligence, and strategic brilliance. He serves as Hand to Joffrey and later Daenerys, proving to be one of the most capable administrators in Westeros. His knowledge of history and politics makes him invaluable, eventually becoming Hand to King Bran the Broken.</p>
+                    <span class="character-house">House Lannister</span>
+                </div>
+            </div>
+
+            <div class="character-card">
+                <img src="https://kimi-web-img.moonshot.cn/img/upload.wikimedia.org/d040ff19be851cce0b8243321dcf089e2c8b600b.jpg" alt="Night King" class="character-image">
+                <div class="character-info">
+                    <h3 class="character-name">The Night King</h3>
+                    <span class="character-title">The Great Other, Death Incarnate</span>
+                    <p class="character-description">The supreme leader and first of the White Walkers, created by the Children of the Forest thousands of years ago as a weapon against the First Men. He commands the army of the dead and seeks to erase the memory of mankind from the world. He breaches the Wall with an undead Viserion and falls at the Battle of Winterfell.</p>
+                    <span class="character-house">The White Walkers</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="world">
+        <h2 class="section-title">World Building</h2>
+        <div class="world-container">
+            <img src="https://kimi-web-img.moonshot.cn/img/i.redd.it/2825f5753048391c973eb0327f21a11b2c047d05.jpg" alt="Map of Westeros" class="world-map">
+            
+            <div class="world-content">
+                <div class="world-card">
+                    <h3><span class="world-icon">🏰</span> The Seven Kingdoms</h3>
+                    <p>Westeros is divided into seven distinct regions, each with its own culture and history. The North, ruled by House Stark from Winterfell, is cold and ancient. The Vale is mountainous and impregnable. The Riverlands, Westerlands, Reach, Stormlands, and Dorne each offer unique landscapes and political dynamics, united under the Iron Throne but often seeking independence.</p>
+                </div>
+
+                <div class="world-card">
+                    <h3><span class="world-icon">🐉</span> Dragons & Magic</h3>
+                    <p>Dragons were the source of Targaryen power for centuries. Balerion the Black Dread, Vhagar, and Meraxes conquered Westeros. After dying out, they were reborn with Daenerys's three dragons: Drogon, Rhaegal, and Viserion. Magic in this world is rare but real—shadow binders, wargs, greenseers, and the resurrection powers of the Lord of Light all exist beyond the Wall and in distant Essos.</p>
+                </div>
+
+                <div class="world-card">
+                    <h3><span class="world-icon">❄️</span> The Wall & Beyond</h3>
+                    <p>An immense wall of ice stretching 300 miles along the northern border of the Seven Kingdoms, guarded by the Night's Watch. Beyond lies the haunted forest and the Land of Always Winter, home to the Free Folk (wildlings) and the ancient enemy: the White Walkers. The Wall was built with magic and ice 8,000 years ago after the Long Night.</p>
+                </div>
+
+                <div class="world-card">
+                    <h3><span class="world-icon">⚔️</span> The Great Houses</h3>
+                    <p>House Stark (Winter is Coming), House Lannister (Hear Me Roar), House Targaryen (Fire and Blood), House Baratheon (Ours is the Fury), House Greyjoy (We Do Not Sow), House Tyrell (Growing Strong), and House Martell (Unbowed, Unbent, Unbroken) form the major powers. Their sigils, words, and ancestral weapons like Valyrian steel swords define their identities.</p>
+                </div>
+
+                <div class="world-card">
+                    <h3><span class="world-icon">🙏</span> Religion & Faith</h3>
+                    <p>The Faith of the Seven dominates the south, worshipping the Father, Mother, Warrior, Smith, Maiden, Crone, and Stranger. The North keeps to the Old Gods of the Forest, worshipped before the Andal invasion. The Iron Islands follow the Drowned God, while R'hllor the Lord of Light gains followers through his priests like Melisandre, wielding the power of resurrection.</p>
+                </div>
+
+                <div class="world-card">
+                    <h3><span class="world-icon">⚖️</span> The Iron Throne</h3>
+                    <p>Forged from the swords of Aegon the Conqueror's defeated enemies using dragonfire, the Iron Throne sits in the Red Keep of King's Landing. It is uncomfortable, dangerous, and symbolic—designed so no ruler should ever sit easy. The pursuit of this throne drives the War of the Five Kings and the conflicts that shape the fate of Westeros.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="facts">
+        <h2 class="section-title">Legendary Facts</h2>
+        <div class="facts-container">
+            
+            <div class="fact-item">
+                <div class="fact-number">01</div>
+                <div class="fact-content">
+                    <h3>Most Expensive TV Show Ever</h3>
+                    <p>The final season cost $15 million per episode, with a total budget of $90 million for just six episodes. The "Battle of Winterfell" took 55 consecutive nights of shooting in freezing conditions.</p>
+                </div>
+            </div>
+
+            <div class="fact-item">
+                <div class="fact-number">02</div>
+                <div class="fact-content">
+                    <h3>Record-Breaking Emmy Winner</h3>
+                    <p>Game of Thrones won 59 Primetime Emmy Awards out of 161 nominations, the most by any drama series in history. It holds the record for most Emmys won by a series in a single season (12 in Season 5).</p>
+                </div>
+            </div>
+
+            <div class="fact-item">
+                <div class="fact-number">03</div>
+                <div class="fact-content">
+                    <h3>Global Phenomenon</h3>
+                    <p>The series averaged over 30 million viewers per episode in its final season across all platforms. It was broadcast in over 170 countries and translated into more than 40 languages.</p>
+                </div>
+            </div>
+
+            <div class="fact-item">
+                <div class="fact-number">04</div>
+                <div class="fact-content">
+                    <h3>The Unseen Pilot</h3>
+                    <p>The original pilot episode was almost entirely reshot. Only two scenes from the original remain in the series: the Stark family finding the direwolf pups and part of the feast at Winterfell.</p>
+                </div>
+            </div>
+
+            <div class="fact-item">
+                <div class="fact-number">05</div>
+                <div class="fact-content">
+                    <h3>Real Locations</h3>
+                    <p>Filming took place across Northern Ireland (The North), Dubrovnik, Croatia (King's Landing), Malta (early King's Landing), Iceland (beyond the Wall), and Spain (Dorne and Dragonstone).</p>
+                </div>
+            </div>
+
+            <div class="fact-item">
+                <div class="fact-number">06</div>
+                <div class="fact-content">
+                    <h3>The Red Wedding Reaction</h3>
+                    <p>The infamous "Red Wedding" episode caused such an emotional reaction that author George R.R. Martin stopped going to fan conventions for a time, as he couldn't handle the grief from fans over the deaths of Robb and Catelyn Stark.</p>
+                </div>
+            </div>
+
+            <div class="fact-item">
+                <div class="fact-number">07</div>
+                <div class="fact-content">
+                    <h3>Valyrian Steel</h3>
+                    <p>The legendary swords like Longclaw, Oathkeeper, and Widow's Wail are made of Valyrian steel, forged with magic and dragonfire in Old Valyria. Only a few smiths in the world can reforge it.</p>
+                </div>
+            </div>
+
+            <div class="fact-item">
+                <div class="fact-number">08</div>
+                <div class="fact-content">
+                    <h3>The Hodor Reveal</h3>
+                    <p>The tragic origin of Hodor's name ("Hold the door") was suggested by Kristian Nairn (the actor who played Hodor) years before it was revealed in the show, though he didn't know the context.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Game of Thrones Fan Tribute. All rights reserved.</p>
+        <p>HBO and related trademarks are property of Home Box Office, Inc.</p>
+        <p class="footer-quote">"The lone wolf dies, but the pack survives."</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Fade in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Add fade-in class to elements
+        document.querySelectorAll('.character-card, .world-card, .fact-item, .stat-card').forEach((el) => {
+            el.classList.add('fade-in');
+            observer.observe(el);
+        });
+
+        // Navigation background change on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.style.background = 'rgba(10, 10, 10, 0.98)';
+                nav.style.padding = '0.5rem 5%';
+            } else {
+                nav.style.background = 'rgba(10, 10, 10, 0.95)';
+                nav.style.padding = '1rem 5%';
+            }
+        });
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+        });
+    </script>
+
+</body>
+</html>
